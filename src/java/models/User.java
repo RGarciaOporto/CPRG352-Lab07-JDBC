@@ -1,14 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package models;
 
-/**
- *
- * @author 851649
- */
 public class User {
+private String firstName;
+private String lastName;
+private final String PASSWORD;
+private String username;
+private boolean status;
+private int role;
+
+public User(String firstName, String lastName, String username, String password, int role, boolean status){
+this.firstName = firstName;
+this.lastName = lastName;
+this.PASSWORD = password;
+this.username = username;
+this.role = role;
+this.status = status;
+}
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
     
+    public String getPassword(){
+    return PASSWORD;
+    }
+
+
 }
