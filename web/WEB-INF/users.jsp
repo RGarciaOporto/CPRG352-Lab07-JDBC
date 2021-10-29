@@ -12,14 +12,60 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Users</title>
-        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/WEB-INF/ManageUsersStyling.css">
+        <style>
+        body{
+            font-family:'Open Sans', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: #ffffff;
+            background-color:#14213d;
+        }
+        
+        h1{
+            text-align: center;
+        }
+        .column {
+            float: left;
+            width: 30%;
+            padding: 5px;
+        }
+        
+        #addUsersForm{
+            padding-left:37%;
+        }
+        
+        #editUsersForm{
+            padding-left:37%;
+        }
+        
+        table {
+            border-collapse: collapse;
+             color:#000000;
+        }
+
+        td, th {
+            border: 1.5px solid #fca311;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th{
+            background-color:#fca311;
+        }
+
+        tr:nth-child(odd){
+            background-color: #ffffff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #e5e5e5;
+        }
+        </style>
     </head>
     
     <body>
         
-        <div id="addUsers">
+        <div id="addUsers" class="column">
         <h1>Add User</h1>
-        <form method="POST">
+        <form method="POST" id="addUsersForm">
             <input type="hidden" name="action" value="add">
             <input type="text" name="email" placeholder="Email"><br>
             <label>Status:</label><br>
@@ -39,7 +85,7 @@
         </form>
         </div>
         
-        <div name="manageUsers">
+        <div name="manageUsers" class="column">
             <h1>Manage Users</h1>
             <form method="POST">
                 <table>
@@ -47,6 +93,8 @@
                         <th>Email</th>
                         <th>Name</th>
                         <th>Role</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     <c:forEach var="users" items="${userList}">
                         <tr>
@@ -61,9 +109,9 @@
             </form>
         </div>
         
-        <div name="editUsers">
+        <div name="editUsers" class="column" id="editUsers">
             <h1>Edit Users</h1>
-            <form method="POST">
+            <form method="POST" id="editUsersForm">
             <input type="hidden" name="action" value="edit">
             <input type="text" name="email" placeholder="Email"><br>
             <label>Status:</label><br>
