@@ -4,13 +4,17 @@
     Author     : 851649
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Manage Users</title>
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/WEB-INF/ManageUsersStyling.css">
     </head>
+    
     <body>
         
         <div id="addUsers">
@@ -38,15 +42,23 @@
         <div name="manageUsers">
             <h1>Manage Users</h1>
             <form method="POST">
-            <c:forEach var="users" items="${userList}">
-            <ul>
-                <li><input type="radio" name="user" value="${item}">${item}</li>
-            </ul>
-                </c:forEach>
-            <input type="hidden" name="action" value="delete">
-            <input type="submit" value="Delete">
-        </form>
-        
+                <table>
+                    <tr>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                    </tr>
+                    <c:forEach var="users" items="${userList}">
+                        <tr>
+                            <td><p>${users.email}</p></td>
+                            <td><p>${users.firstName} ${users.lastName}</p></td>
+                            <td><p>${users.role}</p></td>
+                            <td><input type="submit" name="action" value="Edit"></td>
+                            <td><input type="submit" name="action" value="Delete"></td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </form>
         </div>
         
         <div name="editUsers">

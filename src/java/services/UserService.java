@@ -5,6 +5,7 @@
  */
 package services;
 
+import dataaccess.UserDB;
 import java.util.ArrayList;
 import models.User;
 
@@ -23,8 +24,8 @@ public class UserService {
     */
     
     public ArrayList<User> getAll(){
-    ArrayList<User> userList = new ArrayList<>();
-    
+    UserDB udb = new UserDB();
+    ArrayList<User> userList = udb.getAll();
     return userList;
     }
 }
