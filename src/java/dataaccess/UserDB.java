@@ -56,4 +56,97 @@ public class UserDB {
     return userList;
     }
     
+    public User getUser(String email) throws SQLException{
+        ConnectionPool cp = ConnectionPool.getInstance();
+        Connection con = cp.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        User tempUser = new User();
+        String sql = "SELECT * FROM user WHERE email=?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                boolean active = rs.getBoolean(2);
+                String firstName = rs.getString(3);
+                String lastName = rs.getString(4);
+                String password = rs.getString(5);
+                int role = rs.getInt(6);
+                tempUser = new User(email, active, firstName, lastName, password, role);
+            }
+        }finally {
+            DBUtil.closeResultSet(rs);
+            DBUtil.closePreparedStatement(ps);
+            cp.freeConnection(con);
+        }
+    return tempUser;
+    }
+    
+    public void addUser(User user){
+        ConnectionPool cp = ConnectionPool.getInstance();
+        Connection con = cp.getConnection();
+        PreparedStatement ps = null;
+        
+        String email = user.getEmail();
+        int status = user.statusToInt();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String password = user.getPassword();
+        int role = user.getRole();
+        
+        String sql = "INSERT INTO user (email, active, first_name, last_name,  password , role) VALUES (?, ?, ?, ?, ?, ?)";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setInt(2, status);
+            ps.setString(3, firstName);
+            ps.setString(4, lastName);
+            ps.setString(5, password);
+            ps.setInt(6, role);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            cp.freeConnection(con);
+        }
+    }
+    
+    public void updateUser(User user){
+    ConnectionPool cp = ConnectionPool.getInstance();
+        Connection con = cp.getConnection();
+        PreparedStatement ps = null;
+        
+        String email = user.getEmail();
+        int status = user.statusToInt();
+        String firstName = user.getFirstName();
+        String lastName = user.getLastName();
+        String password = user.getPassword();
+        int role = user.getRole();
+        
+        String sql = "UPDATE user SET active = ?, first_name = ?,  last_name = ?, role = ? WHERE email = ?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setInt(1, status);
+            ps.setString(2, firstName);
+            ps.setString(3, lastName);
+            ps.setInt(4, role);
+            ps.setString(5, email);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            cp.freeConnection(con);
+        }
+    }
+    
+    public void deleteUser(User user){}
+    
 }

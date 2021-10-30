@@ -2,12 +2,22 @@
 package models;
 
 public class User {
+    
 private String firstName;
 private String lastName;
 private final String PASSWORD;
 private String email;
 private boolean status;
 private int role;
+
+public User(){
+firstName = null;
+lastName = null;
+PASSWORD = null;
+email = null;
+status = false;
+role = 0;
+}
 
 public User(String email, boolean status, String firstName, String lastName,  String password, int role){
 this.firstName = firstName;
@@ -44,6 +54,13 @@ this.status = status;
 
     public boolean isStatus() {
         return status;
+    }
+    
+    public int statusToInt(){
+    if(status)
+        return 1;
+    else
+        return 0;
     }
 
     public void setStatus(boolean status) {

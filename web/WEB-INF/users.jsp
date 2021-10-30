@@ -75,7 +75,7 @@
             <label>Inactive</label><br>
             <input type="text" name="firstName" placeholder="First Name"><br>
             <input type="text" name="lastName" placeholder="Last Name"><br>
-            <input type="text" name="pasword" placeholder="Password"><br>
+            <input type="text" name="password" placeholder="Password"><br>
             <select name="role">
                 <option value="sysadmin">System Administrator</option>
                 <option value="compadmin">Company Administrator</option>
@@ -87,7 +87,7 @@
         
         <div name="manageUsers" class="column">
             <h1>Manage Users</h1>
-            <form method="POST">
+            
                 <table>
                     <tr>
                         <th>Email</th>
@@ -101,27 +101,34 @@
                             <td><p>${users.email}</p></td>
                             <td><p>${users.firstName} ${users.lastName}</p></td>
                             <td><p>${users.role}</p></td>
-                            <td><input type="submit" name="action" value="Edit"></td>
-                            <td><input type="submit" name="action" value="Delete"></td>
+                            <td><a href="
+                           <c:url value='/users'>
+                               <c:param name='editEmail' value='${users.email}' />
+                           </c:url>
+                           ">Edit</a></td>
+                            <td><a href="
+                           <c:url value='/users'>
+                               <c:param name='deleteEmail' value='${users.email}' />
+                           </c:url>
+                           ">Delete</a></td>
                         </tr>
                     </c:forEach>
                 </table>
-            </form>
         </div>
         
         <div name="editUsers" class="column" id="editUsers">
             <h1>Edit Users</h1>
             <form method="POST" id="editUsersForm">
-            <input type="hidden" name="action" value="edit">
-            <input type="text" name="email" placeholder="Email"><br>
+            <input type="hidden" name="action" value="update">
+            <input type="text" name="updateEmail" placeholder="Email" readonly="true" value="${toUpdateEmail}"><br>
             <label>Status:</label><br>
-            <input type="radio"  name="status" value="T">
+            <input type="radio"  name="editStatus" value="T">
             <label>Active</label><br>
-            <input type="radio" name="status" value="F">
+            <input type="radio" name="editStatus" value="F">
             <label>Inactive</label><br>
-            <input type="text" name="firstName" placeholder="First Name"><br>
-            <input type="text" name="lastName" placeholder="Last Name"><br>
-            <select name="role">
+            <input type="text" name="editFirstName" placeholder="First Name" value="${toUpdateFirstName}"><br>
+            <input type="text" name="editLastName" placeholder="Last Name" value="${toUpdateLastName}"><br>
+            <select name="editRole">
                 <option value="sysadmin">System Administrator</option>
                 <option value="compadmin">Company Administrator</option>
                 <option value="user">User</option> 
@@ -130,5 +137,6 @@
             <input type="reset" value="Cancel">
         </form>
         </div>
+        <footer id="message">${message}</footer>
     </body>
 </html>

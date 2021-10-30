@@ -28,4 +28,25 @@ public class UserService {
     ArrayList<User> userList = udb.getAll();
     return userList;
     }
+    
+    public User getUser(String email){
+    UserDB udb = new UserDB();
+    User tempUser = udb.getUser(email);
+    return tempUser;
+    }
+    
+    public void addUser(User user){
+    UserDB udb = new UserDB();
+    udb.addUser(user);
+    }
+    
+    public void updateUser(User user){
+    UserDB udb = new UserDB();
+    udb.updateUser(user);
+    }
+    
+    public void deleteUser(User user){
+    UserDB udb = new UserDB();
+    udb.deleteUser(user);
+    }
 }
