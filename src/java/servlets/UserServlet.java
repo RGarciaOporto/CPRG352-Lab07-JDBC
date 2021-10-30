@@ -29,15 +29,19 @@ public class UserServlet extends HttpServlet {
         String deleteParam = request.getParameter("deleteEmail");
         User tempUser;
         
-        
+        //do the appropriate actions if the edit or delete parameters have been passed 
+        //edit will load the values onto the edit window of the jsp
         if(editParam != null){
         tempUser = us.getUser(editParam);
         request.setAttribute("toUpdateEmail",tempUser.getEmail());
         request.setAttribute("toUpdateFirstName",tempUser.getFirstName());
         request.setAttribute("toUpdateLastName",tempUser.getLastName());     
         }
-        
-        if(deleteParam != null){}
+        //delete will remove the entry from the database
+        if(deleteParam != null){
+        tempUser = us.getUser(deleteParam);
+        us.deleteUser(tempUser);
+        }
         
         //load the values from the database onto an array we can display on the jsp
         ArrayList<User> userList = us.getAll();
@@ -49,7 +53,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         UserService us;
         String action = request.getParameter("action");
         String email, firstName, lastName, password, roleValue, statusValue;
@@ -105,15 +108,15 @@ public class UserServlet extends HttpServlet {
                 case "update":
                     us = new UserService();
                     //initialize the variables with values from the jsp
-                    email = request.getParameter("email");
+                    email = request.getParameter("updateEmail");
                     User editUser = us.getUser(email);
-                    firstName = request.getParameter("firstName");
+                    firstName = request.getParameter("editFirstName");
                     if(firstName != null)
                         editUser.setFirstName(firstName);
-                    lastName = request.getParameter("lastName");
+                    lastName = request.getParameter("editLastName");
                     if(lastName != null)
                         editUser.setLastName(lastName);
-                    roleValue = request.getParameter("role");
+                    roleValue = request.getParameter("editRole");
                     //convert  roleValue into an int based on the jsp input 
                     switch(roleValue){
                         case "sysadmin": 
@@ -130,7 +133,7 @@ public class UserServlet extends HttpServlet {
                             break;
                     }
                     editUser.setRole(role);
-                    statusValue = request.getParameter("status");
+                    statusValue = request.getParameter("editStatus");
                     //convert statusValue into a boolean based on the jsp input
                     if (statusValue.equals("T")){
                        status = true; 
@@ -144,24 +147,11 @@ public class UserServlet extends HttpServlet {
                     //load jsp
                     userList = us.getAll();
                     request.setAttribute("userList", userList);
-                    request.setAttribute("message", "User successfully added!");
+                    request.setAttribute("message", "User successfully updated!");
                     getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
                     getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
                     break;
-                /*   
-                case "manage":
-                    //code
-                    String edit = request.getParameter("editButton");
-                    String delete = request.getParameter("deleteButton");
-                    if(edit != null){
-                    request.setAttribute("message", request.getParameter("editAction"));
-                    getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
-                    }
-                    else if(delete !=null){
-                    getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
-                    }
-                    break;
-                 */
+                //in case a button doesn't work/something goes wrong, reload the page.
                 default:
                     doGet(request,response);
                     break;

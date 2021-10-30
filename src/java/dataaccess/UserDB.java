@@ -56,7 +56,7 @@ public class UserDB {
     return userList;
     }
     
-    public User getUser(String email) throws SQLException{
+    public User getUser(String email){
         ConnectionPool cp = ConnectionPool.getInstance();
         Connection con = cp.getConnection();
         PreparedStatement ps = null;
@@ -77,6 +77,8 @@ public class UserDB {
                 int role = rs.getInt(6);
                 tempUser = new User(email, active, firstName, lastName, password, role);
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }finally {
             DBUtil.closeResultSet(rs);
             DBUtil.closePreparedStatement(ps);
@@ -125,7 +127,6 @@ public class UserDB {
         int status = user.statusToInt();
         String firstName = user.getFirstName();
         String lastName = user.getLastName();
-        String password = user.getPassword();
         int role = user.getRole();
         
         String sql = "UPDATE user SET active = ?, first_name = ?,  last_name = ?, role = ? WHERE email = ?";
@@ -147,6 +148,24 @@ public class UserDB {
         }
     }
     
-    public void deleteUser(User user){}
-    
+    public void deleteUser(User user){
+     ConnectionPool cp = ConnectionPool.getInstance();
+     Connection con = cp.getConnection();
+     PreparedStatement ps = null;
+     String email = user.getEmail();
+     
+     String sql = "DELETE FROM user WHERE email=?";
+     
+     try{
+         ps = con.prepareStatement(sql);
+         ps.setString(1, email);
+         ps.executeUpdate();
+     }  catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DBUtil.closePreparedStatement(ps);
+            cp.freeConnection(con);
+        }
+    }
+     
 }
