@@ -31,7 +31,7 @@
         
         .rightColumn{
             float: right;
-            width: 24%;
+            width: 20%;
             padding:10px;
             padding-right: 50px;
         }
@@ -40,6 +40,7 @@
             float:left;
             width:50%;
             padding:10px;
+            padding-left: 3%
         }
         
         #addUsersForm{
