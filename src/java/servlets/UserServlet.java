@@ -34,7 +34,8 @@ public class UserServlet extends HttpServlet {
         tempUser = us.getUser(editParam);
         request.setAttribute("toUpdateEmail",tempUser.getEmail());
         request.setAttribute("toUpdateFirstName",tempUser.getFirstName());
-        request.setAttribute("toUpdateLastName",tempUser.getLastName());     
+        request.setAttribute("toUpdateLastName",tempUser.getLastName());   
+        request.setAttribute("toUpdateRole", tempUser.getRole());
         }
         //delete will remove the entry from the database
         if(deleteParam != null){
@@ -57,7 +58,7 @@ public class UserServlet extends HttpServlet {
         String action = request.getParameter("action");
         String email, firstName, lastName, password, roleValue, statusValue;
         boolean status;
-        int role;
+        int role = 0;
         User tempUser;
         ArrayList<User> userList;
         //perform appropriate response to the action parameter
@@ -73,19 +74,8 @@ public class UserServlet extends HttpServlet {
                     password = request.getParameter("password");
                     roleValue = request.getParameter("role");
                     //convert  roleValue into an int based on the jsp input 
-                    switch(roleValue){
-                        case "sysadmin": 
-                            role = 1;
-                            break;
-                        case "user": 
-                            role = 2;
-                            break;
-                        case "compadmin":
-                            role = 3;
-                            break;
-                        default:
-                            role = 0;
-                            break;
+                    if(roleValue != null){
+                    role = Integer.parseInt(roleValue);
                     }
                     statusValue = request.getParameter("status");
                     
@@ -119,30 +109,17 @@ public class UserServlet extends HttpServlet {
                     us = new UserService();
                     //initialize the variables with values from the jsp
                     email = request.getParameter("updateEmail");
+                    if(email != null && email.length() > 0){
                     User editUser = us.getUser(email);
                     firstName = request.getParameter("editFirstName");
-                    if(firstName != null)
+                    if(firstName != null && firstName.length() > 0)
                         editUser.setFirstName(firstName);
                     lastName = request.getParameter("editLastName");
-                    if(lastName != null)
+                    if(lastName != null && lastName.length() > 0)
                         editUser.setLastName(lastName);
                     roleValue = request.getParameter("editRole");
-                    //convert  roleValue into an int based on the jsp input 
-                    switch(roleValue){
-                        case "sysadmin": 
-                            role = 1;
-                            break;
-                        case "user": 
-                            role = 2;
-                            break;
-                        case "compadmin":
-                            role = 3;
-                            break;
-                        default:
-                            role = 0;
-                            break;
-                    }
-                    editUser.setRole(role);
+                    if(roleValue != null)
+                        editUser.setRole(Integer.parseInt(roleValue));
                     statusValue = request.getParameter("editStatus");
                     //convert statusValue into a boolean based on the jsp input. Only do this if a value was selected.
                     if(statusValue != null) {
@@ -154,15 +131,21 @@ public class UserServlet extends HttpServlet {
                     }
                      editUser.setStatus(status);
                     }
-                   
                     //update the sql file
                     us.updateUser(editUser);
-                    //load jsp
+                    //load jsp after successful update
                     userList = us.getAll();
                     request.setAttribute("userList", userList);
                     request.setAttribute("message", "User successfully updated!");
                     getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                    }
+                    else{
+                    //load jsp with an error message
+                    userList = us.getAll();
+                    request.setAttribute("userList", userList);
+                    request.setAttribute("message", "Please select a user to update from the Manage Users table.");
                     getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                    }
                     break;
                 //in case a button doesn't work/something goes wrong, reload the page.
                 default:

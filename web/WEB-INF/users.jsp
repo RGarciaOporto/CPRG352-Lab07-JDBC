@@ -22,6 +22,7 @@
         h1{
             text-align: center;
         }
+        
         .column {
             float: left;
             width: 30%;
@@ -58,6 +59,11 @@
         tr:nth-child(even) {
             background-color: #e5e5e5;
         }
+        
+        footer{
+            padding: 10px;
+            text-align: center;
+        }
         </style>
     </head>
     
@@ -77,9 +83,9 @@
             <input type="text" name="lastName" placeholder="Last Name"><br>
             <input type="text" name="password" placeholder="Password"><br>
             <select name="role">
-                <option value="sysadmin">System Administrator</option>
-                <option value="compadmin">Company Administrator</option>
-                <option value="user">User</option> 
+                <option value="1">System Administrator</option>
+                <option value="3">Company Administrator</option>
+                <option value="2">User</option> 
             </select><br>
             <input type="submit" value="Save">
         </form>
@@ -129,14 +135,16 @@
             <input type="text" name="editFirstName" placeholder="First Name" value="${toUpdateFirstName}"><br>
             <input type="text" name="editLastName" placeholder="Last Name" value="${toUpdateLastName}"><br>
             <select name="editRole">
-                <option value="sysadmin">System Administrator</option>
-                <option value="compadmin">Company Administrator</option>
-                <option value="user">User</option> 
+                <option value="1">System Administrator</option>
+                <option value="3">Company Administrator</option>
+                <option value="2">User</option> 
             </select><br>
             <input type="submit" value="Save">
             <input type="reset" value="Cancel">
         </form>
         </div>
-        <footer id="message">${message}</footer>
+        <footer id="message">
+            <p>${message}</p>
+        </footer>
     </body>
 </html>

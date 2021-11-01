@@ -15,7 +15,6 @@ import models.Role;
  */
 public class RoleService {
     //need one method: getAll()
-    
     public ArrayList<Role> getAll(){
     RoleDB rdb = new RoleDB();
     ArrayList<Role> roleList = rdb.getAll();
