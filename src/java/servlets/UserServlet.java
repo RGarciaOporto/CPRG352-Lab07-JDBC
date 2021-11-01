@@ -22,7 +22,6 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         UserService us = new UserService();
         //check if we're editing/deleting a value from our manage users table
         String editParam = request.getParameter("editEmail");
@@ -53,6 +52,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //setup variables needed to parse which POST action we are taking
         UserService us;
         String action = request.getParameter("action");
         String email, firstName, lastName, password, roleValue, statusValue;
@@ -60,9 +60,10 @@ public class UserServlet extends HttpServlet {
         int role;
         User tempUser;
         ArrayList<User> userList;
-        
+        //perform appropriate response to the action parameter
          if(action != null){    
         switch(action){
+                //add a new user to the database
                 case "add":
                     us = new UserService();
                     //initialize the variables with values from the jsp
@@ -87,24 +88,33 @@ public class UserServlet extends HttpServlet {
                             break;
                     }
                     statusValue = request.getParameter("status");
-                    //convert statusValue into a boolean based on the jsp input
-                    if (statusValue.equals("T")){
-                       status = true; 
+                    
+                    //if all values are not null or empty, create user and add it to the .sql file. Otherwise display an error message.'
+                    if(email != null && email.length() > 0 && statusValue != null && firstName != null && firstName.length() > 0 
+                            && lastName != null && lastName.length() > 0 && password != null && password.length() > 0 && role != 0){
+                        //convert statusValue into a boolean based on the jsp input
+                        if (statusValue.equals("T")){
+                            status = true; 
+                        }
+                        else{
+                            status = false;
+                         }
+                        tempUser = new User(email, status, firstName, lastName, password, role);
+                        us.addUser(tempUser);
+                        //load jsp
+                        userList = us.getAll();
+                        request.setAttribute("userList", userList);
+                        request.setAttribute("message", "User successfully added!");
+                        getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
                     }
                     else{
-                        status = false;
+                        userList = us.getAll();
+                        request.setAttribute("userList", userList);
+                        request.setAttribute("message", "At least one of the fields wasn't filled properly, please ensure every field is filled before adding a user.");
+                        getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
                     }
-          
-                    //create user and add it to the .sql file
-                    tempUser = new User(email, status, firstName, lastName, password, role);
-                    us.addUser(tempUser);
-                    //load jsp
-                    userList = us.getAll();
-                    request.setAttribute("userList", userList);
-                    request.setAttribute("message", "User successfully added!");
-                    getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
                     break;
-                    
+                //update a user in the database   
                 case "update":
                     us = new UserService();
                     //initialize the variables with values from the jsp
@@ -134,14 +144,17 @@ public class UserServlet extends HttpServlet {
                     }
                     editUser.setRole(role);
                     statusValue = request.getParameter("editStatus");
-                    //convert statusValue into a boolean based on the jsp input
+                    //convert statusValue into a boolean based on the jsp input. Only do this if a value was selected.
+                    if(statusValue != null) {
                     if (statusValue.equals("T")){
                        status = true; 
                     }
                     else{
                         status = false;
                     }
-                    editUser.setStatus(status);
+                     editUser.setStatus(status);
+                    }
+                   
                     //update the sql file
                     us.updateUser(editUser);
                     //load jsp
