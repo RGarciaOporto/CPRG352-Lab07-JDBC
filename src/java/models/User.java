@@ -70,6 +70,19 @@ this.status = status;
     public int getRole() {
         return role;
     }
+    
+    public String roleTitle(){
+        switch(role){
+            case(1):
+                return "System Administrator";
+            case(2):
+                return "User";
+            case(3):
+                return "Company Administrator";
+            default:
+                return "Role";
+        }
+    }
 
     public void setRole(int role) {
         this.role = role;

@@ -23,23 +23,42 @@
             text-align: center;
         }
         
-        .column {
-            float: left;
-            width: 30%;
-            padding: 5px;
+        .leftColumn{
+            float:left;
+            width: 20%;
+            padding:10px;
+        }
+        
+        .rightColumn{
+            float: right;
+            width: 24%;
+            padding:10px;
+            padding-right: 50px;
+        }
+        
+        .centerColumn{
+            float:left;
+            width:50%;
+            padding:10px;
         }
         
         #addUsersForm{
-            padding-left:37%;
+            padding-left:30%;
+        }
+        
+        #manageUsers{
+            
         }
         
         #editUsersForm{
-            padding-left:37%;
+            padding-left:30%;
         }
         
         table {
             border-collapse: collapse;
              color:#000000;
+             margin-left: auto;
+             margin-right:auto;
         }
 
         td, th {
@@ -69,7 +88,7 @@
     
     <body>
         
-        <div id="addUsers" class="column">
+        <div id="addUsers" class="leftColumn">
         <h1>Add User</h1>
         <form method="POST" id="addUsersForm">
             <input type="hidden" name="action" value="add">
@@ -91,9 +110,9 @@
         </form>
         </div>
         
-        <div name="manageUsers" class="column">
+        <div name="manageUsers" class="centerColumn">
             <h1>Manage Users</h1>
-            
+            <div name="manageUsers">
                 <table>
                     <tr>
                         <th>Email</th>
@@ -106,7 +125,7 @@
                         <tr>
                             <td><p>${users.email}</p></td>
                             <td><p>${users.firstName} ${users.lastName}</p></td>
-                            <td><p>${users.role}</p></td>
+                            <td><p>${users.roleTitle()}</p></td>
                             <td><a href="
                            <c:url value='/users'>
                                <c:param name='editEmail' value='${users.email}' />
@@ -120,9 +139,10 @@
                         </tr>
                     </c:forEach>
                 </table>
+            </div>
         </div>
         
-        <div name="editUsers" class="column" id="editUsers">
+        <div name="editUsers" class="rightColumn" id="editUsers">
             <h1>Edit Users</h1>
             <form method="POST" id="editUsersForm">
             <input type="hidden" name="action" value="update">
